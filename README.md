@@ -1,6 +1,6 @@
 # Taller Cinco Crud
 ## Funcion.
-´´´
+```
 create or replace function asignar_ranking (
 c_grade in varchar)
 return VARCHAR2
@@ -23,4 +23,4 @@ begin
         end case;
     return c_rank;
 end;
-´´´
+```
