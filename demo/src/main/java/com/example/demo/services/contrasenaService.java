@@ -2,19 +2,10 @@ package com.example.demo.services;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.example.demo.model.Contrasena;
 import com.example.demo.repository.ContrasenaRepository;
 
@@ -27,11 +18,6 @@ public class contrasenaService {
 	@Autowired
     private JdbcTemplate jdbcTemplate;
 	
-	public String asignar_ranking(String number){
-		String sql = "select asignar_ranking(?) from dual";
-		return jdbcTemplate.queryForObject(sql, new Object[] {number}, String.class);
-	}
-		
 
 	public Contrasena saveContrasena(Contrasena contrasena) {
 	    return repository.save(contrasena);
@@ -82,11 +68,89 @@ public class contrasenaService {
         }
     }
     
+    public String asignar_ranking(String number){
+		String sql = "select asignar_ranking(?) from dual";
+		return jdbcTemplate.queryForObject(sql, new Object[] {number}, String.class);
+	}
+    
+    
+    
+    //This function is number 1 of Taller
+    public int Factorial(int num){
+    	try{
+    		String sql = "select Factorial(?) from dual";
+    		return jdbcTemplate.queryForObject(sql, int.class,num);
+    	} catch (DataAccessException e) {
+            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+            return -1;
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error inesperado: " + e.getMessage());
+            return -1;
+        }
+    }
+    
+  //This function is number 2 of Taller
+    public int calcularMCD(int num1, int num2){
+    	try {
+    	String sql = "select calcularMCD(?,?) from dual";
+    	return jdbcTemplate.queryForObject(sql,int.class,num1,num2);
+    	} catch(DataAccessException e){
+    		System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+    		return -1;
+    	} catch(Exception e){
+    		 System.out.println("Ocurrió un error inesperado: " + e.getMessage());
+    		 return -1;
+    	}
+    }
+    
+    
+  //This function is number 3 of Taller
+    public String is_prime(int number){
+    	try {
+    	String sql = "select Primos(?) from dual";
+    	return jdbcTemplate.queryForObject(sql,String.class,number);
+    	} catch(DataAccessException e){
+    		System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+   		 	return  "Error en la consulta SQL";
+    	} catch (Exception e) {
+    		System.out.println("Ocurrió un error inesperado: " + e.getMessage());
+   	     	return "Error general";
+    	}
+    }
+    
+  //This function is number 4 of Taller
+    public String Fibonacci(int number){
+    	 try{
+    		String sql = "select serieFibo(?) from dual"; 
+    		return jdbcTemplate.queryForObject(sql, String.class,number);
+    	 } catch (DataAccessException e){
+    		 System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+    		 return  "Error en la consulta SQL";
+    	 } catch (Exception e) {
+    		 System.out.println("Ocurrió un error inesperado: " + e.getMessage());
+    	     return "Error general";
+    	 }
+    }
+    
     
     public Contrasena check_password(Long id, Contrasena date){
     	String contra = date.getPassword();
     	String sql = "select check_password(?,?) from dual";
     	return jdbcTemplate.queryForObject(sql, new Object[] {id,contra},Contrasena.class);
     }
+    
+    //This function is number 5 of Taller
+    public void actualizarPrecioProducto(String codProducto, double nuevoPrecio) {
+        try {
+            String sql = "{call actualizar_precio_producto(?, ?)}";
+            jdbcTemplate.update(sql, codProducto, nuevoPrecio);
+            System.out.println("Precio actualizado correctamente.");
+        } catch (DataAccessException e) {
+            System.out.println("Error al ejecutar el procedimiento: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error inesperado: " + e.getMessage());
+        }
+    }
+
     
 }

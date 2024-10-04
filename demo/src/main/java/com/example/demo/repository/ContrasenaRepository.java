@@ -9,3 +9,4 @@ import com.example.demo.model.Contrasena;
 public interface ContrasenaRepository extends JpaRepository<Contrasena,Long>{
 
 }
+
