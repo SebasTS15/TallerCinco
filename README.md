@@ -144,3 +144,31 @@ BEGIN
     COMMIT;
 END;
 ```
+# Taller 7 Procedimientos y funciones en Oracle
+Para hacer el llamdo de postman es:
+POST: http://localhost:8080/TC/checkPassword
+```
+CREATE OR REPLACE FUNCTION validar_usuario_contraseña(
+    p_usuario IN VARCHAR2,
+    p_contraseña IN VARCHAR2
+) RETURN NUMBER
+IS
+    v_valida NUMBER := 0;
+BEGIN
+    -- Validar longitud de la contraseña
+    IF LENGTH(p_contraseña) BETWEEN 13 AND 20 THEN
+        -- Validar que cumpla con las condiciones de mayúsculas, minúsculas, números y caracteres especiales
+        IF REGEXP_LIKE(p_contraseña, '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{13,20}$') THEN
+            -- Insertar los datos si la contraseña es válida
+            INSERT INTO Taller_Cuatro (usuario, contraseña)
+            VALUES (p_usuario, p_contraseña);
+            -- Indicar que la contraseña es válida
+            v_valida := 1;
+        END IF;
+    END IF;
+    
+    -- Retornar 1 si la contraseña es válida, 0 si no
+    RETURN v_valida;
+END;
+
+```
